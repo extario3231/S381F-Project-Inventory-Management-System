@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Manage</title>
+    </head>
+    <body>
+        <div>
+            <form action="/manage/insert" method="post">
+            <button type="submit">Insert</button>
+            </form>
+            <form action="/manage/update" method="post">
+                <button type="submit">Update</button>
+            </form>
+            <form action="/manage/delete" method="post">
+                <button type="submit">Insert</button>
+            </form>
+            <form action="/manage/search" method="get">
+                <input type="text">
+                <button type="submit">Search</button>
+            </form>
+            <form action="/back" method="get">
+                <button type="submit">Back</button>
+            </form>
+        </div>
+        <% for (let item of items) { %>
+            <li><%= item %></li>
+        <% } %> 
+    </body>
+</html>
