@@ -1,4 +1,5 @@
-.button {
-    display: inline-block;
-    font-size: large;
+.btns {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: flex-end;
 }
