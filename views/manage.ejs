@@ -5,26 +5,41 @@
         <title>Manage</title>
     </head>
     <body>
+        <h2>Hi! <%= username %></h2>
         <div>
             <form action="/manage/insert" method="post">
-            <button type="submit">Insert</button>
+                <div class="button">
+                    <button type="submit">Insert</button>
+                </div>
             </form>
             <form action="/manage/update" method="post">
-                <button type="submit">Update</button>
+                <div class="button">
+                    <button type="submit">Update</button>
+                </div>
             </form>
             <form action="/manage/delete" method="post">
                 <button type="submit">Insert</button>
             </form>
             <form action="/manage/search" method="get">
-                <input type="text">
                 <button type="submit">Search</button>
             </form>
-            <form action="/back" method="get">
-                <button type="submit">Back</button>
+            <form action="/logout" method="get">
+                <button type="submit">Log out</button>
             </form>
         </div>
-        <% for (let item of items) { %>
-            <li><%= item %></li>
-        <% } %> 
+        <ol>
+            <% for (let item of items) { %>
+                <hr>
+                <li>
+                    <input type="checkbox"><br>
+                    Name: <%= item.name %><br>
+                    Type: <%= item.type %><br>
+                    Quantity: <%= item.quantity %><br>
+                    Address: <%= item.address %><br>
+                    <button type="submit">Delete</button>
+                </li>
+                <hr>
+            <% } %>
+        </ol> 
     </body>
 </html>
