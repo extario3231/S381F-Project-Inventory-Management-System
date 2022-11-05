@@ -13,14 +13,9 @@ app.use(session({
     keys: ['userid', 'password']
 }));
 
-mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
+let itemArray = null;
 
-function search(filter) {
-    Item.find(filter, (err, results) => {
-        if (err) throw err;
-        res
-    });
-}
+mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
 app.get("/", (req, res) => {
     res.render('index');
@@ -44,9 +39,10 @@ app.get("/manage", (req, res) => {
 
     Item.find({}, (err, results) => {
             if (err) throw err;
+            itemArray = results;
             res.render('manage', {
                 username: username,
-                items: results
+                items: itemArray
         });
     });
 });
@@ -69,6 +65,16 @@ app.post("/insert", (req, res) => {
         alert('Saved');
     });
     res.redirect('/insert');
+});
+
+app.get('/search', (req, res) => {
+    res.render('manage', {
+        username: req.session.username,
+        items: itemArray.filter(item => {
+            const filter = req.body.search;
+            item.name === filter || item.type === filter || item.quantity === parseInt(filter) || item.address === filter
+        })
+    });
 });
 
 app.post('/delete', (req, res) => {
