@@ -15,6 +15,13 @@ app.use(session({
 
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
+function search(filter) {
+    Item.find(filter, (err, results) => {
+        if (err) throw err;
+        res
+    });
+}
+
 app.get("/", (req, res) => {
     res.render('index');
 });
@@ -64,12 +71,18 @@ app.post("/insert", (req, res) => {
     res.redirect('/insert');
 });
 
-app.get("/manage/search", (req, res) => {
-    
-});
-
 app.post('/delete', (req, res) => {
-    
-})
+    const body = req.body;
+
+    const name = body.name;
+    const type = body.type;
+    const qty = body.quantity;
+    const address = body.address;
+
+    Item.deleteOne({name: name, type: type, quantity: qty, address: address}, err => {
+        if (err) alert('Error');
+        alert('Deleted');
+    });
+});
 
 app.listen(port);

@@ -18,6 +18,7 @@
                 <button type="submit">Insert</button>
             </form>
             <form action="/manage/search" method="get">
+                <input type="text" onchange="">
                 <button type="submit">Search</button>
             </form>
             <form action="/logout" method="get">
@@ -28,12 +29,12 @@
             <% for (let item of items) { %>
                 <hr>
                 <li>
-                    <input type="checkbox"><br>
-                    Name: <%= item.name %><br>
-                    Type: <%= item.type %><br>
-                    Quantity: <%= item.quantity %><br>
-                    Address: <%= item.address %><br>
                     <form action="/delete" method="post">
+                        <input type="checkbox"><br>
+                        Name: <%= item.name %><br>
+                        Type: <%= item.type %><br>
+                        Quantity: <%= item.quantity %><br>
+                        Address: <%= item.address %><br>
                         <button type="submit">Delete</button>
                     </form>
                 </li>
