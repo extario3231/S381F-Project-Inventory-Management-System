@@ -17,11 +17,11 @@ let itemArray = null;
 
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.post("/login", (req, res) => {
+app.post('/login', (req, res) => {
     const username = req.body.user;
 
     req.session.authenticated = true;
@@ -34,7 +34,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-app.get("/manage", (req, res) => {
+app.get('/manage', (req, res) => {
     const username = req.session.username;
 
     Item.find({}, (err, results) => {
@@ -47,11 +47,11 @@ app.get("/manage", (req, res) => {
     });
 });
 
-app.post("/manage/insert", (req, res) => {
+app.get('/manage/insert', (req, res) => {
     res.render('insert');
 });
 
-app.post("/insert", (req, res) => {
+app.post('/insert', (req, res) => {
     const body = req.body;
     const newItem = new Item({
         name: body.name,
@@ -62,9 +62,9 @@ app.post("/insert", (req, res) => {
     
     newItem.save(err => {
         if (err) alert('Error!');
-        alert('Saved');
-    });
-    res.redirect('/insert');
+        res.send('Saved');
+        
+    }).then(res.redirect('/insert'));
 });
 
 app.get('/search', (req, res) => {
@@ -77,7 +77,7 @@ app.get('/search', (req, res) => {
     });
 });
 
-app.post('/delete', (req, res) => {
+app.delete('/delete', (req, res) => {
     const body = req.body;
 
     const name = body.name;
@@ -88,6 +88,7 @@ app.post('/delete', (req, res) => {
     Item.deleteOne({name: name, type: type, quantity: qty, address: address}, err => {
         if (err) alert('Error');
         alert('Deleted');
+        res.redirect('/manage');
     });
 });
 
