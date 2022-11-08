@@ -39,7 +39,7 @@ app.get('/logout', (req, res) => {
 app.get('/manage', (req, res) => {
     const username = req.session.username;
 
-    Item.find({}).then((err, results) => {
+    Item.find({}, (err, results) => {
             if (err) throw err;
             itemArray = results;
             res.render('manage', {
@@ -65,8 +65,8 @@ app.post('/insert', (req, res) => {
     newItem.save(err => {
         if (err) alert('Error!');
         res.send('Saved');
-        
-    }).then(res.redirect('/insert'));
+    });
+    res.redirect('/insert');
 });
 
 app.get('/search', (req, res) => {
@@ -88,7 +88,7 @@ app.get('/delete', (req, res) => {
     const qty = body.quantity;
     const address = body.address;
 
-    Item.deleteOne({name: name, type: type, quantity: qty, address: address}).then(err => {
+    Item.deleteOne({name: name, type: type, quantity: qty, address: address} ,err => {
         if (err) alert('Error');
         alert('Deleted');
         res.redirect('/manage');
