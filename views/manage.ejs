@@ -8,14 +8,11 @@
     <body>
         <h2>Hi! <%= username %></h2>
         <div class="btns">
-            <form action="/manage/insert" method="post" class="button">
+            <form action="/manage/insert" method="get" class="button">
                 <button type="submit">Insert</button>
-            </form>
-            <form action="/manage/update" method="post" class="button">
-                    <button type="submit">Update</button>
             </form>
             <form action="/manage/delete" method="post">
-                <button type="submit">Insert</button>
+                <button type="submit">Delete</button>
             </form>
             <form action="/search" method="get">
                 <input type="text" name="search">
@@ -29,13 +26,14 @@
             <% for (let item of items) { %>
                 <hr>
                 <li>
-                    <form action="/delete" method="post">
+                    <form action="/delete" method="get">
                         <input type="checkbox"><br>
                         Name: <%= item.name %><br>
                         Type: <%= item.type %><br>
                         Quantity: <%= item.quantity %><br>
                         Address: <%= item.address %><br>
-                        <button type="submit">Delete</button>
+                        <button type="submit" style="padding: 0;">Update</button>
+                        <button type="submit" style="padding: 0;">Delete</button>
                     </form>
                 </li>
                 <hr>

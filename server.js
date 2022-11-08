@@ -77,7 +77,7 @@ app.get('/search', (req, res) => {
     });
 });
 
-app.delete('/delete', (req, res) => {
+app.get('/delete', (req, res) => {
     const body = req.body;
 
     const name = body.name;
