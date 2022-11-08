@@ -3,7 +3,10 @@
     <head>
         <meta charset="utf-8">
         <title>Manage</title>
-        <link rel="stylesheet" href="/public/style.css">
+        <link rel="stylesheet" href="/style.css">
+        <script>
+            console.log(document.body);
+        </script>
     </head>
     <body>
         <h2>Hi! <%= username %></h2>
@@ -24,15 +27,16 @@
         </div>
         <ol>
             <% for (let item of items) { %>
-                <hr>
                 <li>
-                    <form action="/delete" method="get">
-                        <input type="checkbox"><br>
-                        Name: <%= item.name %><br>
-                        Type: <%= item.type %><br>
-                        Quantity: <%= item.quantity %><br>
-                        Address: <%= item.address %><br>
+                    <input type="checkbox"><br>
+                    <p id="name">Name: <%= item.name %></p>
+                    Type: <%= item.type %><br>
+                    Quantity: <%= item.quantity %><br>
+                    Address: <%= item.address %><br>
+                    <form action="/manage/update" method="get">
                         <button type="submit" style="padding: 0;">Update</button>
+                    </form>
+                    <form action="/delete" method="get">
                         <button type="submit" style="padding: 0;">Delete</button>
                     </form>
                 </li>

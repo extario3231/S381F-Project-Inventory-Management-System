@@ -2,5 +2,10 @@
     display: flex;
     flex-flow: wrap;
     justify-content: flex-end;
-    padding: 0;
+    padding: 0px;
+}
+
+p {
+    margin: 0px;
+    padding: 0px;
 }

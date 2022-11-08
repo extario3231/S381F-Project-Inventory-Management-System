@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Item = require('./models/model');
 const session = require('cookie-session');
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
 const app = express();
 const port = 3000;
 
@@ -16,7 +18,9 @@ app.use(session({
 let itemArray = null;
 
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
-
+JSDOM.fromFile('./views/manage.ejs').then(dom => {
+    console.log(dom.window);
+});
 app.get('/', (req, res) => {
     res.render('index');
 });
@@ -37,7 +41,7 @@ app.get('/logout', (req, res) => {
 app.get('/manage', (req, res) => {
     const username = req.session.username;
 
-    Item.find({}, (err, results) => {
+    Item.find({}).then((err, results) => {
             if (err) throw err;
             itemArray = results;
             res.render('manage', {
@@ -78,6 +82,7 @@ app.get('/search', (req, res) => {
 });
 
 app.get('/delete', (req, res) => {
+    
     const body = req.body;
 
     const name = body.name;
@@ -85,11 +90,25 @@ app.get('/delete', (req, res) => {
     const qty = body.quantity;
     const address = body.address;
 
-    Item.deleteOne({name: name, type: type, quantity: qty, address: address}, err => {
+    Item.deleteOne({name: name, type: type, quantity: qty, address: address}).then(err => {
         if (err) alert('Error');
         alert('Deleted');
         res.redirect('/manage');
     });
 });
+
+app.get('/manage/update', (req, res) => {
+    res.render('update', {
+        name: 'p'
+    });
+
+    res.
+
+    Item.updateOne()
+})
+
+app.post('/update', (req, res) => {
+
+})
 
 app.listen(port);
