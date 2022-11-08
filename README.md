@@ -8,8 +8,8 @@ Yuen Chi Pang 12460622
 
 ## How to use
 
-At the home page, there is a log in session and you enter your log in credentials.
-After logging in, on the top-right corner od the management page, there is a log out button. You will be log out if the button is pressed.
+At the home page, there is a login session and you enter your login credentials.
+After logging in, on the top-right corner of the management page, there is a logout button. You will be logged out if the button is pressed.
 
 ### CRUD Operations
 On the management page, several buttons are located at the top-right corner, including *Search* and *Insert*. These buttons allow users to insert new documents and search documents.
