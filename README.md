@@ -21,4 +21,4 @@ HTTP request types in this project includes:
 2. POST
 
 ## Path URLs
-Each path URLs are named correspondly to their functions.
+Each path URLs are named correspondingly to their functions.
