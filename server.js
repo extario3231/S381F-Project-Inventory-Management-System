@@ -18,9 +18,7 @@ app.use(session({
 let itemArray = null;
 
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
-JSDOM.fromFile('./views/manage.ejs').then(dom => {
-    console.log(dom.window);
-});
+
 app.get('/', (req, res) => {
     res.render('index');
 });
@@ -99,12 +97,8 @@ app.get('/delete', (req, res) => {
 
 app.get('/manage/update', (req, res) => {
     res.render('update', {
-        name: 'p'
+        
     });
-
-    res.
-
-    Item.updateOne()
 })
 
 app.post('/update', (req, res) => {
