@@ -67,7 +67,7 @@ app.post('/insert', (req, res) => {
 });
 
 app.get('/manage/search', (req, res) => {
-    res.render('search.ejs');
+    res.render('search');
 });
 
 app.get('/search', (req, res) => {
@@ -82,8 +82,8 @@ app.get('/search', (req, res) => {
     Item.find(query, (err, results) => {
         if (err) console.log(err);
         res.render('manage', {
-        username: 'user',
-        items: results
+            username: 'user',
+            items: results
         });
     });
 });
