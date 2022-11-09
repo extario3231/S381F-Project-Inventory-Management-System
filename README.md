@@ -3,6 +3,11 @@
 # Inventory Management System
 
 Group Members:
+
+Hon Pak Hin   12358560
+
+Ke Cheuk Lam  12465979
+
 Yuen Chi Pang 12460622
 
 
