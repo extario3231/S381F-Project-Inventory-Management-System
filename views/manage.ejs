@@ -4,9 +4,6 @@
         <meta charset="utf-8">
         <title>Manage</title>
         <link rel="stylesheet" href="/style.css">
-        <script>
-            console.log(document.body);
-        </script>
     </head>
     <body>
         <h2 style="text-align: center;">Hi! <%= username %></h2>
@@ -17,7 +14,7 @@
             <form action="/manage/delete" method="post">
                 <button type="submit">Delete</button>
             </form>
-            <form action="/search" method="get">
+            <form action="/manage/search" method="get">
                 <input type="text" name="search">
                 <button type="submit">Search</button>
             </form>

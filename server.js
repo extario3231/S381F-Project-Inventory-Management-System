@@ -15,8 +15,6 @@ app.use(session({
     keys: ['userid', 'password']
 }));
 
-let itemArray = null;
-
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
 app.get('/', (req, res) => {
@@ -39,12 +37,11 @@ app.get('/logout', (req, res) => {
 app.get('/manage', (req, res) => {
     const username = req.session.username;
 
-    Item.find({}, (err, results) => {
-            if (err) throw err;
-            itemArray = results;
-            res.render('manage', {
-                username: username,
-                items: itemArray
+    Item.find({}, (err, query) => {
+        if (err) console.log(err);
+        res.render('manage', {
+        username: username,
+        items: query
         });
     });
 });
@@ -69,26 +66,39 @@ app.post('/insert', (req, res) => {
     res.redirect('/insert');
 });
 
+app.get('/manage/search', (req, res) => {
+    res.render('search.ejs');
+});
+
 app.get('/search', (req, res) => {
-    res.render('manage', {
-        username: req.session.username,
-        items: itemArray.filter(item => {
-            const filter = req.body.search;
-            item.name === filter || item.type === filter || item.quantity === parseInt(filter) || item.address === filter
-        })
+    const query = req.query;
+
+    for (const key in query) {
+        if (Object.hasOwn(query, key) && query[key].length == 0) {
+            delete query[key];
+        }
+    }
+    
+
+    Item.find(query, (err, results) => {
+        if (err) console.log(err);
+        res.render('manage', {
+        username: 'user',
+        items: results
+        });
     });
 });
 
 app.get('/delete', (req, res) => {
-    
-    const body = req.body;
+    const query = req.query;
 
-    const name = body.name;
-    const type = body.type;
-    const qty = body.quantity;
-    const address = body.address;
+    for (const key in query) {
+        if (Object.hasOwn(query, key) && query[key].length == 0) {
+            delete query[key];
+        }
+    }
 
-    Item.deleteOne({name: name, type: type, quantity: qty, address: address} ,err => {
+    Item.deleteOne(query, err => {
         if (err) alert('Error');
         alert('Deleted');
         res.redirect('/manage');
