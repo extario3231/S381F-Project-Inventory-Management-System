@@ -7,6 +7,7 @@ const { JSDOM } = jsdom;
 const app = express();
 const port = 3000;
 
+
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -15,7 +16,9 @@ app.use(session({
     keys: ['userid', 'password']
 }));
 
-mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
+let itemArray = null;
+
+mongoose.connect('mongodb+srv://testing:testing123@cluster0.in3qik0.mongodb.net/?retryWrites=true&w=majority');
 
 app.get('/', (req, res) => {
     res.render('index');
@@ -37,11 +40,12 @@ app.get('/logout', (req, res) => {
 app.get('/manage', (req, res) => {
     const username = req.session.username;
 
-    Item.find({}, (err, query) => {
-        if (err) console.log(err);
-        res.render('manage', {
-        username: username,
-        items: query
+    Item.find({}, (err, results) => {
+            if (err) throw err;
+            itemArray = results;
+            res.render('manage', {
+                username: username,
+                items: itemArray
         });
     });
 });
@@ -60,58 +64,47 @@ app.post('/insert', (req, res) => {
     });
     
     newItem.save(err => {
-        if (err) alert('Error!');
+        if (err) console.log('Error!');
         res.send('Saved');
     });
-    res.redirect('/insert');
-});
-
-app.get('/manage/search', (req, res) => {
-    res.render('search');
+    res.redirect('/manage');
 });
 
 app.get('/search', (req, res) => {
-    const query = req.query;
-
-    for (const key in query) {
-        if (Object.hasOwn(query, key) && query[key].length == 0) {
-            delete query[key];
-        }
-    }
-    
-    Item.find(query, (err, results) => {
-        if (err) console.log(err);
-        res.render('manage', {
-            username: 'user',
-            items: results
-        });
+    res.render('manage', {
+        username: req.session.username,
+        items: itemArray.filter(item => {
+            const filter = req.body.search;
+            item.name === filter || item.type === filter || item.quantity === parseInt(filter) || item.address === filter
+        })
     });
 });
 
 app.get('/delete', (req, res) => {
-    const query = req.query;
+    res.render('delete');
+});
+app.post('/delete', (req, res) => {
+    
+    const body = req.body;
 
-    for (const key in query) {
-        if (Object.hasOwn(query, key) && query[key].length == 0) {
-            delete query[key];
-        }
-    }
-
-    Item.deleteOne(query, err => {
-        if (err) alert('Error');
-        alert('Deleted');
+    const name = body.name;
+    const type = body.type;
+    const qty = body.qty;
+    const address = body.address;
+       
+    Item.deleteOne({name:name, type:type, quantity:qty, address:address},err => {
+        if (err) console.log('Error');
+        console.log('Deleted');
         res.redirect('/manage');
     });
 });
 
-app.get('/manage/update', (req, res) => {
-    res.render('update', {
-        
-    });
+app.get('/update', (req, res) => {
+    res.render('update');
 })
 
 app.post('/update', (req, res) => {
-
+    
 })
 
 app.listen(port);
