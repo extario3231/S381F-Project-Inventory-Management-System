@@ -4,6 +4,9 @@
         <meta charset="utf-8">
         <title>Manage</title>
         <link rel="stylesheet" href="/style.css">
+        <script>
+            console.log(document.body);
+        </script>
     </head>
     <body>
         <h2 style="text-align: center;">Hi! <%= username %></h2>
@@ -11,10 +14,7 @@
             <form action="/manage/insert" method="get" class="button">
                 <button type="submit">Insert</button>
             </form>
-            <form action="/manage/delete" method="post">
-                <button type="submit">Delete</button>
-            </form>
-            <form action="/manage/search" method="get">
+            <form action="/search" method="get">
                 <input type="text" name="search">
                 <button type="submit">Search</button>
             </form>
@@ -30,7 +30,7 @@
                     Type: <%= item.type %><br>
                     Quantity: <%= item.quantity %><br>
                     Address: <%= item.address %><br>
-                    <form action="/manage/update" method="get">
+                    <form action="/update" method="get">
                         <button type="submit" style="padding: 0;">Update</button>
                     </form>
                     <form action="/delete" method="get">
