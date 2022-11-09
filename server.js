@@ -79,7 +79,6 @@ app.get('/search', (req, res) => {
         }
     }
     
-
     Item.find(query, (err, results) => {
         if (err) console.log(err);
         res.render('manage', {
