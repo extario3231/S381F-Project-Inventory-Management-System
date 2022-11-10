@@ -4,10 +4,9 @@
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "jsdom": "^20.0.2",
-    "mongoose": "^6.7.0",
-    "nodemon": "*"
+    "mongoose": "^6.7.0"
   },
   "scripts": {
-    "start": "nodemon server"
+    "start": "node server"
   }
 }
