@@ -94,7 +94,7 @@ app.get('/delete', (req, res) => {
     res.render('delete');
 });
 
-app.post('/item/delete', (req, res) => {
+app.post('/delete', (req, res) => {
     const itemToDelete = req.body;
 
     for (const key in itemToDelete) {
@@ -115,7 +115,7 @@ app.get('/update', (req, res) => {
 })
 
 app.post('/update', (req, res) => {
-    
+    console.log('Updated');
 })
 
 app.listen(port);
