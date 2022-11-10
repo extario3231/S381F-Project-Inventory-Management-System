@@ -4,38 +4,67 @@
         <meta charset="utf-8">
         <title>Manage</title>
         <link rel="stylesheet" href="/style.css">
+        <style>
+            h1 {
+            	color: blue;
+            	text-align:center;
+            }
+            .button {
+  		background-color: #008CBA;
+  		border: none;
+  		color: white;
+  		padding: 15px 32px;
+  		text-align: center;
+  		text-decoration: none;
+  		display: inline-block;
+  		font-size: 16px;
+	    }
+	    .center {
+  		margin-left: auto;
+  		margin-right: auto;
+	    }
+        </style>
         <script>
             console.log(document.body);
         </script>
     </head>
     <body>
-        <h2 style="text-align: center;">Hi! <%= username %></h2>
-        <div class="btns">
-            <form action="/manage/insert" method="get" class="button">
-                <button type="submit">Insert</button>
+        <h1>Hi! <%= username %></h1>
+        <table class="center">
+            <td>
+            <form action="/manage/insert" method="get">
+                <button type="submit" class="button">Insert</button>
             </form>
-            <form action="/manage/search" method="get">
-                <input type="text" name="search">
-                <button type="submit">Search</button>
+            </td>
+            <td>
+            <form action="/manage/search" method="get">	
+                <button type="submit" class="button">Search</button>
             </form>
+            </td>
+            <td>
+            <form action="/delete" method="get">
+                <button type="submit" class="button">Delete</button>
+            </form>
+            </td>
+            <td>
+            <form action="/update" method="get">
+                <button type="submit" class="button">Update</button>
+            </form>
+            </td>
+            <td>
             <form action="/logout" method="post">
-                <button type="submit">Log out</button>
+                <button type="submit" class="button">Log out</button>
             </form>
-        </div>
+            </td>
+        </table>
+        <h1>Your items are listed here:</h1>
         <ol>
             <% for (let item of items) { %>
                 <li>
-                    <input type="checkbox"><br>
                     <p id="name">Name: <%= item.name %></p>
                     Type: <%= item.type %><br>
                     Quantity: <%= item.quantity %><br>
                     Address: <%= item.address %><br>
-                    <form action="/update" method="get">
-                        <button type="submit" style="padding: 0;">Update</button>
-                    </form>
-                    <form action="/delete" method="get">
-                        <button type="submit" style="padding: 0;">Delete</button>
-                    </form>
                 </li>
                 <hr>
             <% } %>
