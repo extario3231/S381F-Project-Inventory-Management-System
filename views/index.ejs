@@ -3,17 +3,46 @@
     <head>
         <meta charset="utf-8">
         <title>Inventory Management System</title>
+        <style>
+            h1 {color:blue}
+            button {
+            width: 10%;
+  	    background-color: #4CAF50;
+  	    color: white;
+  	    padding: 14px 20px;
+  	    margin: 8px 0;
+  	    border: none;
+  	    border-radius: 4px;
+  	    cursor: pointer;
+  	    }
+  	    form {font-size:30px;}
+  	    input[type=text] {
+  	    width: 10%;
+  	    margin: 8px 0;
+  	    box-sizing: border-box;
+  	    font-size:30px;
+  	    }
+  	    input[type=password] {
+  	    width: 10%;
+  	    margin: 8px 0;
+  	    box-sizing: border-box;
+  	    font-size:30px;
+  	    }
+        </style>
     </head>
     <body>
-        <h2>Inventory Management System</h2>
+        <h1>Inventory Management System</h1>
         <br>
         <form action="/login" method="post" id="login">
-            <label for="userid">Username</label>
-            <input type="text" name="user">
+            <label for="userid">Username:</label>
             <br>
-            <label for="password">Password</label>
-            <input type="password" name="password">
-            <button type="submit">Log in</button>
+            <input type="text" name="user" placeholder="123">
+            <br>
+            <label for="password">Password:</label>
+            <br>
+            <input type="password" name="password" placeholder="123">
+            <br>
+            <button type="submit" name="button">Log in</button>
         </form>
     </body>
 </html>
