@@ -16,9 +16,7 @@ app.use(session({
     keys: ['userid', 'password']
 }));
 
-let itemArray = null;
-
-mongoose.connect('mongodb+srv://testing:testing123@cluster0.in3qik0.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
 app.get('/', (req, res) => {
     res.render('index');
@@ -32,7 +30,7 @@ app.post('/login', (req, res) => {
     res.redirect('/manage');
 });
 
-app.get('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
     req.session = null;
     res.redirect('/');
 });
@@ -42,10 +40,9 @@ app.get('/manage', (req, res) => {
 
     Item.find({}, (err, results) => {
             if (err) throw err;
-            itemArray = results;
             res.render('manage', {
                 username: username,
-                items: itemArray
+                items: results
         });
     });
 });
@@ -56,6 +53,7 @@ app.get('/manage/insert', (req, res) => {
 
 app.post('/insert', (req, res) => {
     const body = req.body;
+
     const newItem = new Item({
         name: body.name,
         type: body.type,
@@ -70,29 +68,42 @@ app.post('/insert', (req, res) => {
     res.redirect('/manage');
 });
 
+app.get('/manage/search', (req, res) => {
+    res.render('search');
+});
+
 app.get('/search', (req, res) => {
-    res.render('manage', {
-        username: req.session.username,
-        items: itemArray.filter(item => {
-            const filter = req.body.search;
-            item.name === filter || item.type === filter || item.quantity === parseInt(filter) || item.address === filter
-        })
+    const query = req.query;
+
+    for (const key in query) {
+        if (Object.hasOwn(query, key) && query[key].length == 0) {
+            delete query[key];
+        }
+    }
+
+    Item.find(query, (err, results) => {
+            if (err) throw err;
+            res.render('manage', {
+                username: req.session.username,
+                items: results
+        });
     });
 });
 
 app.get('/delete', (req, res) => {
     res.render('delete');
 });
-app.post('/delete', (req, res) => {
-    
-    const body = req.body;
 
-    const name = body.name;
-    const type = body.type;
-    const qty = body.qty;
-    const address = body.address;
+app.post('/item/delete', (req, res) => {
+    const itemToDelete = req.body;
+
+    for (const key in itemToDelete) {
+        if (Object.hasOwn(itemToDelete, key) && itemToDelete[key].length == 0) {
+            delete itemToDelete[key];
+        }
+    }
        
-    Item.deleteOne({name:name, type:type, quantity:qty, address:address},err => {
+    Item.deleteOne(itemToDelete ,err => {
         if (err) console.log('Error');
         console.log('Deleted');
         res.redirect('/manage');
