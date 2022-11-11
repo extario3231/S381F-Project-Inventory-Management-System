@@ -114,30 +114,30 @@ app.post('/delete', (req, res) => {
 });
 
 const getData = async (path) => {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        
-        await page.goto(`http://localhost:3000${path}`);
-        await page.waitForSelector('p');
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    
+    await page.goto(`http://localhost:3000${path}`);
+    await page.waitForSelector('p');
 
-        const dataToSend = await page.evaluate(() => {
-            const data = []
-            const allData = [...document.getElementsByTagName('p')];
+    const dataToSend = await page.evaluate(() => {
+        const data = []
+        const allData = [...document.getElementsByTagName('p')];
 
-            for (let index = 0; index < allData.length; index++) {
-                if (index > 0 && (index + 1) % 4 === 0) {
-                    const name = allData[index-3].textContent.split(': ')[1];
-                    const type = allData[index-2].textContent.split(': ')[1];
-                    const qty = allData[index-1].textContent.split(': ')[1];
-                    const addr = allData[index].textContent.split(': ')[1];
-                    data.push([name, type, qty, addr]);
-                }
+        for (let index = 0; index < allData.length; index++) {
+            if (index > 0 && (index + 1) % 4 === 0) {
+                const name = allData[index-3].textContent.split(': ')[1];
+                const type = allData[index-2].textContent.split(': ')[1];
+                const qty = allData[index-1].textContent.split(': ')[1];
+                const addr = allData[index].textContent.split(': ')[1];
+                data.push([name, type, qty, addr]);
             }
+        }
 
-            return data;
-        });
-        browser.close();
-        return dataToSend;
+        return data;
+    });
+    browser.close();
+    return dataToSend;
 };
 
 app.get('/update', (req, res) => {
@@ -152,7 +152,6 @@ app.get('/update', (req, res) => {
             address: dataPos[3]
         });
     });
-    
 });
     
 app.post('/item/update', (req, res) => {
