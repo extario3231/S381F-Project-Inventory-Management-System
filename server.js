@@ -66,7 +66,7 @@ app.post('/insert', (req, res) => {
         if (err) console.log('Error!');
         console.log('Saved');
     });
-    res.redirect('/manage');
+    res.statusCode(200).redirect('/manage');
 });
 
 app.get('/manage/search', (req, res) => {
@@ -84,7 +84,7 @@ app.get('/search', (req, res) => {
 
     Item.find(query, (err, results) => {
         if (err) throw err;
-        res.render('manage', {
+        res.statusCode(200).render('manage', {
             username: req.session.username,
             items: results
         });
@@ -107,7 +107,7 @@ app.post('/delete', (req, res) => {
         Item.deleteOne(filter, (err) => {
             if (err) console.log('Error');
             console.log('Deleted');
-            res.redirect('/manage');
+            res.statusCode(200).redirect('/manage');
         });
     });
 });
