@@ -2,8 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Item = require('./models/model');
 const session = require('cookie-session');
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
 const puppeteer = require('puppeteer');
 const app = express();
 const port = 3000;
@@ -95,7 +93,7 @@ app.get('/delete', (req, res) => {
     res.render('delete');
 });
 
-app.post('/item/delete', (req, res) => {
+app.post('/delete', (req, res) => {
     const itemToDelete = req.body;
 
     for (const key in itemToDelete) {
@@ -111,34 +109,45 @@ app.post('/item/delete', (req, res) => {
     });
 });
 
-app.get('/update', (req, res) => {
-    const itemIndex = parseInt(req.query[0]);
 
-    const sendData = async next => {
+
+app.get('/update', (req, res) => {
+    const key = Object.keys(req.query)[0];
+
+    const sendData = async (key) => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-      
-        await page.goto('http://localhost:3000/manage');
         
-        const textContent = await page.evaluate(() => {
-            return document.getElementsByTagName('p')[0].textContent.split(': ')[1]
+        await page.goto('http://localhost:3000/manage');
+        await page.waitForSelector('p');
+
+        const dataToSend = await page.evaluate((i) => {
+            const data = []
+            const allData = [...document.getElementsByTagName('p')];
+            for (let index = i; index < i+4; index++) {
+                data.push(allData[index].textContent.split(': ')[1])
+            }
+            return data;
+        }, key);
+        browser.close();
+        return dataToSend;
+};
+    sendData(key).then((data) => {
+        res.render('update', {
+            name: data[0],
+            type: data[1],
+            qty: data[2],
+            address: data[3]
         });
-        next(textContent);
-};  
-    sendData((results) => {
-        const array = [];
-        for (let index = itemIndex; index < itemIndex + 3; index++) {
-            console.log(results);
-        }
-        console.log(itemIndex);
-    })
-    // res.render('update', {
-    //     name: name,
-    // });
+    });
+    
 })
 
 app.post('/item/update', (req, res) => {
+})
     
+app.post('/update', (req, res) => {
+    console.log('Updated');
 })
 
 app.listen(port);

@@ -13,12 +13,10 @@ Yuen Chi Pang 12460622
 
 ## How to use
 At the home page, there is a login session and you enter your login credentials.
-After logging in, on the top-right corner of the management page, there is a logout button. You will be logged out if the button is pressed.
+After logging in, you will see the manage page, there are several CRUD buttons and a logout button under the welcome message.
 
 ### CRUD Operations
-On the management page, several buttons are located at the top-right corner, including *Search* and *Insert*. These buttons allow users to insert new documents and search documents.
-
-At the end of each document, *Update* and *Delete* are there to provide functionalites for users to update and delete documents.
+You can insert, search, delete and update document by pressing the corresponding buttons.
 
 ## HTTP Request Types
 HTTP request types in this project includes:
