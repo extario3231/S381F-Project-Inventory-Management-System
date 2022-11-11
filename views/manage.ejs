@@ -4,9 +4,6 @@
         <meta charset="utf-8">
         <title>Manage</title>
         <link rel="stylesheet" href="/style.css">
-        <script>
-            console.log(document.body);
-        </script>
     </head>
     <body>
         <h2 style="text-align: center;">Hi! <%= username %></h2>
@@ -23,15 +20,15 @@
             </form>
         </div>
         <ol>
-            <% for (let item of items) { %>
+            <% for (let i = 0; i < items.length; i++) { %>
                 <li>
                     <input type="checkbox"><br>
-                    <p id="name">Name: <%= item.name %></p>
-                    Type: <%= item.type %><br>
-                    Quantity: <%= item.quantity %><br>
-                    Address: <%= item.address %><br>
+                    <p id="name">Name: <%= items[i].name %></p>
+                    <p id="type">Type: <%= items[i].type %></p>
+                    <p id="qty">Quantity: <%= items[i].quantity %></p>
+                    <p id="address">Address: <%= items[i].address %></p>
                     <form action="/update" method="get">
-                        <button type="submit" style="padding: 0;">Update</button>
+                        <button name="<%= i %>" type="submit" style="padding: 0;">Update</button>
                     </form>
                     <form action="/delete" method="get">
                         <button type="submit" style="padding: 0;">Delete</button>
@@ -39,6 +36,6 @@
                 </li>
                 <hr>
             <% } %>
-        </ol> 
+        </ol>
     </body>
 </html>

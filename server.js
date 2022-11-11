@@ -4,6 +4,7 @@ const Item = require('./models/model');
 const session = require('cookie-session');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
+const puppeteer = require('puppeteer');
 const app = express();
 const port = 3000;
 
@@ -111,10 +112,32 @@ app.post('/item/delete', (req, res) => {
 });
 
 app.get('/update', (req, res) => {
-    res.render('update');
+    const itemIndex = parseInt(req.query[0]);
+
+    const sendData = async next => {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+      
+        await page.goto('http://localhost:3000/manage');
+        
+        const textContent = await page.evaluate(() => {
+            return document.getElementsByTagName('p')[0].textContent.split(': ')[1]
+        });
+        next(textContent);
+};  
+    sendData((results) => {
+        const array = [];
+        for (let index = itemIndex; index < itemIndex + 3; index++) {
+            console.log(results);
+        }
+        console.log(itemIndex);
+    })
+    // res.render('update', {
+    //     name: name,
+    // });
 })
 
-app.post('/update', (req, res) => {
+app.post('/item/update', (req, res) => {
     
 })
 
