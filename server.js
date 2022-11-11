@@ -99,7 +99,6 @@ app.get('/manage/delete', (req, res) => {
 app.post('/delete', (req, res) => {
     const itemToDeleteKey = Object.keys(req.body)[0];
     const currentUrl = urls.length === 0 ? '/manage' : urls[0];
-    console.log(currentUrl);
 
     getData(currentUrl).then((data) => {
         const dataPos = data[itemToDeleteKey];
@@ -161,14 +160,14 @@ app.post('/item/update', (req, res) => {
     (async () => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        const url = `http://localhost:3000/update?${param}=`;
+        const url = `http://localhost:3000/update`;
         
         await page.goto(url);
         console.log(url);
         const name = await page.evaluate(() => {
             const data = []
             const allData = [...document.getElementsByTagName('input')];
-            return document.getElementsByTagName('input')[0].value;
+            return allData[0].value;
 
             // for (let index = 0; index < allData; index++) {
             //     data.push(allData[index])
