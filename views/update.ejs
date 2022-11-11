@@ -10,21 +10,24 @@
         <form action="/update" method="post">
             Name
             <br>
-            <input type="text" name="name" value=<%= name %>>
+            <input type="text" id="name" value=<%= name %>>
             <br>
             Type
             <br>
-            <input type="text" name="type" value=<%= type %>>
+            <input type="text" id="type" value=<%= type %>>
             <br>
             Quantity
             <br>
-            <input type="number" name="qty" value=<%= qty %>>
+            <input type="number" id="qty" value=<%= qty %>>
             <br>
             Address
             <br>
-            <input type="text" name="address" value=<%= address %>>
+            <input type="text" id="address" value=<%= address %>>
             <br>
             <button type="submit">Update</button>
         </form>
+        <script>
+            console.log(document.getElementById('name').value);
+        </script>
     </body>
 </html>

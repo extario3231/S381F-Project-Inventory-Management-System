@@ -114,7 +114,7 @@ app.post('/delete', (req, res) => {
 app.get('/update', (req, res) => {
     const key = Object.keys(req.query)[0];
 
-    const sendData = async (key) => {
+    const getData = async (key) => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         
@@ -124,7 +124,8 @@ app.get('/update', (req, res) => {
         const dataToSend = await page.evaluate((i) => {
             const data = []
             const allData = [...document.getElementsByTagName('p')];
-            for (let index = i; index < i+4; index++) {
+
+            for (let index = i; index < i + 4; index++) {
                 data.push(allData[index].textContent.split(': ')[1])
             }
             return data;
@@ -132,7 +133,7 @@ app.get('/update', (req, res) => {
         browser.close();
         return dataToSend;
 };
-    sendData(key).then((data) => {
+    getData(key).then((data) => {
         res.render('update', {
             name: data[0],
             type: data[1],
@@ -141,13 +142,19 @@ app.get('/update', (req, res) => {
         });
     });
     
-})
-
-app.post('/item/update', (req, res) => {
-})
+});
     
 app.post('/update', (req, res) => {
-    console.log('Updated');
-})
+    const body = req.body;
+
+    (async () => {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        
+        await page.goto('http://localhost:3000/update');
+        const name = await page.evaluate(() => document.getElementById('name').value);
+        console.log(name);
+    })();
+});
 
 app.listen(port);
