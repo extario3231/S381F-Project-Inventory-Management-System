@@ -109,12 +109,7 @@ app.post('/delete', (req, res) => {
     });
 });
 
-
-
-app.get('/update', (req, res) => {
-    const key = Object.keys(req.query)[0];
-
-    const getData = async (key) => {
+const getData = async (key) => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         
@@ -124,35 +119,58 @@ app.get('/update', (req, res) => {
         const dataToSend = await page.evaluate((i) => {
             const data = []
             const allData = [...document.getElementsByTagName('p')];
+            let counter = 0;
 
-            for (let index = i; index < i + 4; index++) {
-                data.push(allData[index].textContent.split(': ')[1])
+            for (let index = 0; index < allData.length; index++) {
+                if (index > 0 && (index + 1) % 4 === 0) {
+                    const name = allData[index-3].textContent.split(': ')[1];
+                    const type = allData[index-2].textContent.split(': ')[1];
+                    const qty = allData[index-1].textContent.split(': ')[1];
+                    const addr = allData[index].textContent.split(': ')[1];
+                    data.push([name, type, qty, addr]);
+                }
             }
+            console.log(data);
             return data;
         }, key);
         browser.close();
         return dataToSend;
 };
+
+app.get('/update', (req, res) => {
+    const key = Object.keys(req.query)[0];
+    
     getData(key).then((data) => {
+        dataPos = data[key]
         res.render('update', {
-            name: data[0],
-            type: data[1],
-            qty: data[2],
-            address: data[3]
+            name: dataPos[0],
+            type: dataPos[1],
+            qty: dataPos[2],
+            address: dataPos[3]
         });
     });
     
 });
     
-app.post('/update', (req, res) => {
-    const body = req.body;
+app.post('/item/update', (req, res) => {
+    const param = Object.keys(req.query)[0];
+    console.log(req.query);
 
     (async () => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         
-        await page.goto('http://localhost:3000/update');
-        const name = await page.evaluate(() => document.getElementById('name').value);
+        await page.goto(`http://localhost:3000/update?${param}=`);
+        const name = await page.evaluate(() => {
+            const data = []
+            const allData = [...document.getElementsByTagName('input')];
+            return document.getElementsByTagName('input')[0].value;
+
+            // for (let index = 0; index < allData; index++) {
+            //     data.push(allData[index])
+            // }
+            // return data;
+        });
         console.log(name);
     })();
 });

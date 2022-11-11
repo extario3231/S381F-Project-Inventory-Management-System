@@ -7,7 +7,7 @@
     <body>
         <h2>Update an item</h2>
         <br>
-        <form action="/update" method="post">
+        <form action="/item/update" method="post">
             Name
             <br>
             <input type="text" id="name" value=<%= name %>>
@@ -26,8 +26,5 @@
             <br>
             <button type="submit">Update</button>
         </form>
-        <script>
-            console.log(document.getElementById('name').value);
-        </script>
     </body>
 </html>
