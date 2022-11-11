@@ -39,7 +39,7 @@
             </form>
             </td>
             <td>
-            <form action="/delete" method="get">
+            <form action="/manage/delete" method="get">
                 <button type="submit" class="button">Delete</button>
             </form>
             </td>
@@ -66,8 +66,8 @@
                     <form action="/update" method="get">
                         <button name="<%= i %>" type="submit" style="padding: 0;">Update</button>
                     </form>
-                    <form action="/delete" method="get">
-                        <button type="submit" style="padding: 0;">Delete</button>
+                    <form action="/delete" method="post">
+                        <button name="<%= i %>" type="submit" style="padding: 0;">Delete</button>
                     </form>
                 </li>
                 <hr>

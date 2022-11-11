@@ -17,6 +17,8 @@ app.use(session({
 
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
+let urls = [];
+
 app.get('/', (req, res) => {
     res.render('index');
 });
@@ -60,9 +62,9 @@ app.post('/insert', (req, res) => {
         address: body.address
     });
     
-    newItem.save(err => {
+    newItem.save((err) => {
         if (err) console.log('Error!');
-        res.send('Saved');
+        console.log('Saved');
     });
     res.redirect('/manage');
 });
@@ -75,51 +77,52 @@ app.get('/search', (req, res) => {
     const query = req.query;
 
     for (const key in query) {
-        if (Object.hasOwn(query, key) && query[key].length == 0) {
+        if (Object.hasOwn(query, key) && query[key].length === 0) {
             delete query[key];
         }
     }
 
     Item.find(query, (err, results) => {
-            if (err) throw err;
-            res.render('manage', {
-                username: req.session.username,
-                items: results
+        if (err) throw err;
+        res.render('manage', {
+            username: req.session.username,
+            items: results
         });
+        urls.push(req.originalUrl);
     });
 });
 
-app.get('/delete', (req, res) => {
+app.get('/manage/delete', (req, res) => {
     res.render('delete');
 });
 
 app.post('/delete', (req, res) => {
-    const itemToDelete = req.body;
+    const itemToDeleteKey = Object.keys(req.body)[0];
+    const currentUrl = urls.length === 0 ? '/manage' : urls[0];
+    console.log(currentUrl);
 
-    for (const key in itemToDelete) {
-        if (Object.hasOwn(itemToDelete, key) && itemToDelete[key].length == 0) {
-            delete itemToDelete[key];
-        }
-    }
-       
-    Item.deleteOne(itemToDelete ,err => {
-        if (err) console.log('Error');
-        console.log('Deleted');
-        res.redirect('/manage');
+    getData(currentUrl).then((data) => {
+        const dataPos = data[itemToDeleteKey];
+        const filter = {name: dataPos[0], type: dataPos[1], quantity: dataPos[2], address: dataPos[3]};
+
+        Item.deleteOne(filter, (err) => {
+            if (err) console.log('Error');
+            console.log('Deleted');
+            res.redirect('/manage');
+        });
     });
 });
 
-const getData = async (key) => {
+const getData = async (path) => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         
-        await page.goto('http://localhost:3000/manage');
+        await page.goto(`http://localhost:3000${path}`);
         await page.waitForSelector('p');
 
-        const dataToSend = await page.evaluate((i) => {
+        const dataToSend = await page.evaluate(() => {
             const data = []
             const allData = [...document.getElementsByTagName('p')];
-            let counter = 0;
 
             for (let index = 0; index < allData.length; index++) {
                 if (index > 0 && (index + 1) % 4 === 0) {
@@ -132,7 +135,7 @@ const getData = async (key) => {
             }
 
             return data;
-        }, key);
+        });
         browser.close();
         return dataToSend;
 };
@@ -140,8 +143,8 @@ const getData = async (key) => {
 app.get('/update', (req, res) => {
     const key = Object.keys(req.query)[0];
     
-    getData(key).then((data) => {
-        dataPos = data[key]
+    getData('/manage').then((data) => {
+        const dataPos = data[key]
         res.render('update', {
             name: dataPos[0],
             type: dataPos[1],
@@ -159,8 +162,10 @@ app.post('/item/update', (req, res) => {
     (async () => {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
+        const url = `http://localhost:3000/update?${param}=`;
         
-        await page.goto(`http://localhost:3000/update?${param}=`);
+        await page.goto(url);
+        console.log(url);
         const name = await page.evaluate(() => {
             const data = []
             const allData = [...document.getElementsByTagName('input')];
