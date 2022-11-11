@@ -130,7 +130,7 @@ const getData = async (key) => {
                     data.push([name, type, qty, addr]);
                 }
             }
-            console.log(data);
+
             return data;
         }, key);
         browser.close();
