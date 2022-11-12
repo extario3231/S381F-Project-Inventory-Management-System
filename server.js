@@ -4,7 +4,7 @@ const Item = require('./models/model');
 const session = require('cookie-session');
 const puppeteer = require('puppeteer');
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
 
 app.set('view engine', 'ejs');
@@ -180,4 +180,4 @@ app.post('/item/update', (req, res) => {
     });
 });
 
-app.listen(port);
+app.listen(PORT);
