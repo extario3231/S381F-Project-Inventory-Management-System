@@ -157,7 +157,7 @@ app.get('/update', (req, res) => {
     const key = Object.keys(req.query)[0];
     
     getData('/manage').then((data) => {
-        const dataPos = data[key]
+        const dataPos = data[key];
         originalData = {name: dataPos[0], type: dataPos[1], quantity: dataPos[2], address: dataPos[3]};
         console.log(originalData);
         res.render('update', originalData);
