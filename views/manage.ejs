@@ -39,8 +39,8 @@
             </form>
             </td>
             <td>
-            <form action="/manage/delete" method="get">
-                <button type="submit" class="button">Delete</button>
+            <form action="/delete/batch" method="get">
+                <button type="submit" class="button">Batch Delete</button>
             </form>
             </td>
             <td>
@@ -58,11 +58,11 @@
         <ol>
             <% for (let i = 0; i < items.length; i++) { %>
                 <li>
-                    <input type="checkbox"><br>
-                    <p id="name">Name: <%= items[i].name %></p>
-                    <p id="type">Type: <%= items[i].type %></p>
-                    <p id="qty">Quantity: <%= items[i].quantity %></p>
-                    <p id="address">Address: <%= items[i].address %></p>
+                    <input type="checkbox" id="cb" onclick="c(this)"><br>
+                    Name: <p id="name" class="attr"><%= items[i].name %></p><br>
+                    Type: <p id="type" class="attr"><%= items[i].type %></p><br>
+                    Quantity: <p id="qty" class="attr"><%= items[i].quantity %></p><br>
+                    Address: <p id="address" class="attr"><%= items[i].address %></p><br>
                     <form action="/update" method="get">
                         <button name="<%= i %>" type="submit" style="padding: 0;">Update</button>
                     </form>

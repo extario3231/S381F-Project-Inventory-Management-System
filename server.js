@@ -17,6 +17,38 @@ app.use(session({
 
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
+const getPage = async (path) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    
+    await page.goto(`http://localhost:3000${path}`);
+    return page;
+}
+
+const getData = async (path) => {
+    const page = await getPage(path);
+    await page.waitForSelector('p');
+
+    const dataToSend = await page.evaluate(() => {
+        const data = []
+        const allData = [...document.querySelectorAll('p')];
+
+        for (let index = 0; index < allData.length; index++) {
+            if (index > 0 && (index + 1) % 4 === 0) {
+                const name = allData[index-3].textContent;
+                const type = allData[index-2].textContent;
+                const qty = allData[index-1].textContent;
+                const addr = allData[index].textContent;
+                data.push([name, type, qty, addr]);
+            }
+        }
+
+        return data;
+    });
+    await page.close();
+    return dataToSend;
+};
+
 let urls = [];
 
 app.get('/', (req, res) => {
@@ -92,7 +124,7 @@ app.get('/search', (req, res) => {
     });
 });
 
-app.get('/manage/delete', (req, res) => {
+app.get('/delete/batch', (req, res) => {
     res.render('delete');
 });
 
@@ -111,33 +143,6 @@ app.post('/delete', (req, res) => {
         });
     });
 });
-
-const getData = async (path) => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    
-    await page.goto(`http://localhost:3000${path}`);
-    await page.waitForSelector('p');
-
-    const dataToSend = await page.evaluate(() => {
-        const data = []
-        const allData = [...document.getElementsByTagName('p')];
-
-        for (let index = 0; index < allData.length; index++) {
-            if (index > 0 && (index + 1) % 4 === 0) {
-                const name = allData[index-3].textContent.split(': ')[1];
-                const type = allData[index-2].textContent.split(': ')[1];
-                const qty = allData[index-1].textContent.split(': ')[1];
-                const addr = allData[index].textContent.split(': ')[1];
-                data.push([name, type, qty, addr]);
-            }
-        }
-
-        return data;
-    });
-    browser.close();
-    return dataToSend;
-};
 
 app.get('/update', (req, res) => {
     const key = Object.keys(req.query)[0];

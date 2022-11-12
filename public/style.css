@@ -5,7 +5,8 @@
     padding: 0px;
 }
 
-p {
+.attr {
     margin: 0px;
     padding: 0px;
+    display: inline;
 }
