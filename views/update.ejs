@@ -10,19 +10,19 @@
         <form action="/item/update" method="post">
             Name
             <br>
-            <input type="text" id="name" value=<%= name %>>
+            <input type="text" name="name" value="<%= name %>">
             <br>
             Type
             <br>
-            <input type="text" id="type" value=<%= type %>>
+            <input type="text" name="type" value="<%= type %>">
             <br>
             Quantity
             <br>
-            <input type="number" id="qty" value=<%= qty %>>
+            <input type="number" name="quantity" value="<%= quantity %>">
             <br>
             Address
             <br>
-            <input type="text" id="address" value=<%= address %>>
+            <input type="text" name="address" value="<%= address %>">
             <br>
             <button type="submit">Update</button>
         </form>

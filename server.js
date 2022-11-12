@@ -50,6 +50,7 @@ const getData = async (path) => {
 };
 
 let urls = [];
+let originalData;
 
 app.get('/', (req, res) => {
     res.render('index');
@@ -60,7 +61,7 @@ app.post('/login', (req, res) => {
 
     req.session.authenticated = true;
     req.session.username = username;
-    res.redirect('/manage');
+    res.status(200).redirect('/manage');
 });
 
 app.post('/logout', (req, res) => {
@@ -98,7 +99,7 @@ app.post('/insert', (req, res) => {
         if (err) console.log('Error!');
         console.log('Saved');
     });
-    res.statusCode(200).redirect('/manage');
+    res.status(200).redirect('/manage');
 });
 
 app.get('/manage/search', (req, res) => {
@@ -116,7 +117,7 @@ app.get('/search', (req, res) => {
 
     Item.find(query, (err, results) => {
         if (err) throw err;
-        res.statusCode(200).render('manage', {
+        res.status(200).render('manage', {
             username: req.session.username,
             items: results
         });
@@ -125,7 +126,15 @@ app.get('/search', (req, res) => {
 });
 
 app.get('/delete/batch', (req, res) => {
-    res.render('delete');
+    const getItemData = async () => {
+        const page = await getPage('/manage');
+        await page.waitForSelector('#cb')
+        const h = page.evaluate(() => {
+            const g = [...document.querySelectorAll('#cb')]
+            return g
+        })
+        console.log(h);
+    }
 });
 
 app.post('/delete', (req, res) => {
@@ -149,38 +158,26 @@ app.get('/update', (req, res) => {
     
     getData('/manage').then((data) => {
         const dataPos = data[key]
-        res.render('update', {
-            name: dataPos[0],
-            type: dataPos[1],
-            qty: dataPos[2],
-            address: dataPos[3]
-        });
+        originalData = {name: dataPos[0], type: dataPos[1], quantity: dataPos[2], address: dataPos[3]};
+        console.log(originalData);
+        res.render('update', originalData);
     });
 });
     
 app.post('/item/update', (req, res) => {
-    const param = Object.keys(req.query)[0];
-    console.log(req.query);
-
-    (async () => {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        const url = `http://localhost:3000/update`;
-        
-        await page.goto(url);
-        console.log(url);
-        const name = await page.evaluate(() => {
-            const data = []
-            const allData = [...document.getElementsByTagName('input')];
-            return allData[0].value;
-
-            // for (let index = 0; index < allData; index++) {
-            //     data.push(allData[index])
-            // }
-            // return data;
-        });
-        console.log(name);
-    })();
+    const form = req.body;
+    delete originalData._locals;
+    const dataToUpdate = {};
+    for (const key in form) {
+        if (form[key] !== originalData[key])
+            dataToUpdate[key] = form[key];
+    }
+    
+    Item.updateOne(originalData, dataToUpdate, (err) => {
+        if (err) console.log(err);
+        console.log('Updated');
+        res.redirect('/manage');
+    });
 });
 
 app.listen(port);
