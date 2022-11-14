@@ -66,7 +66,7 @@ app.post('/login', (req, res) => {
 
 app.post('/logout', (req, res) => {
     req.session = null;
-    res.redirect('/');
+    res.status(200).redirect('/');
 });
 
 app.get('/manage', (req, res) => {
@@ -74,7 +74,7 @@ app.get('/manage', (req, res) => {
 
     Item.find({}, (err, results) => {
             if (err) throw err;
-            res.render('manage', {
+            res.status(200).render('manage', {
                 username: username,
                 items: results
         });
@@ -148,7 +148,7 @@ app.post('/delete', (req, res) => {
         Item.deleteOne(filter, (err) => {
             if (err) console.log('Error');
             console.log('Deleted');
-            res.statusCode(200).redirect('/manage');
+            res.status(200).redirect('/manage');
         });
     });
 });
@@ -160,7 +160,7 @@ app.get('/update', (req, res) => {
         const dataPos = data[key];
         originalData = {name: dataPos[0], type: dataPos[1], quantity: dataPos[2], address: dataPos[3]};
         console.log(originalData);
-        res.render('update', originalData);
+        res.status(200).render('update', originalData);
     });
 });
     
@@ -176,7 +176,7 @@ app.post('/item/update', (req, res) => {
     Item.updateOne(originalData, dataToUpdate, (err) => {
         if (err) console.log(err);
         console.log('Updated');
-        res.redirect('/manage');
+        res.status(200).redirect('/manage');
     });
 });
 
