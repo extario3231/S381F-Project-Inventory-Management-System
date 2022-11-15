@@ -103,7 +103,7 @@ app.post('/insert', (req, res) => {
 });
 
 app.get('/manage/search', (req, res) => {
-    res.render('search');
+    res.status(200).render('search');
 });
 
 app.get('/search', (req, res) => {
@@ -116,7 +116,7 @@ app.get('/search', (req, res) => {
     }
 
     Item.find(query, (err, results) => {
-        if (err) throw err;
+        if (err) res.status(404).render('404');
         res.status(200).render('manage', {
             username: req.session.username,
             items: results
@@ -157,8 +157,13 @@ app.get('/update', (req, res) => {
     const key = Object.keys(req.query)[0];
     
     getData('/manage').then((data) => {
-        const dataPos = data[key];
-        originalData = {name: dataPos[0], type: dataPos[1], quantity: dataPos[2], address: dataPos[3]};
+        try {
+            const dataPos = data[key];
+        } catch (error) {
+            res.status(404).render('404');
+        }
+    
+        originalData = {name: dataPos?.[0], type: dataPos?.[1], quantity: dataPos?.[2], address: dataPos?.[3]};
         res.status(200).render('update', originalData);
     });
 });
@@ -173,7 +178,7 @@ app.post('/item/update', (req, res) => {
     }
     
     Item.updateOne(originalData, dataToUpdate, (err) => {
-        if (err) console.log(err);
+        if (err) res.status(404).render('404');
         console.log('Updated');
         res.status(200).redirect('/manage');
     });
