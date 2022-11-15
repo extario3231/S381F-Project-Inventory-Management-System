@@ -162,7 +162,7 @@ app.get('/update', (req, res) => {
         } catch (error) {
             res.status(404).render('404');
         }
-    
+        const dataPos = data[key];
         originalData = {name: dataPos?.[0], type: dataPos?.[1], quantity: dataPos?.[2], address: dataPos?.[3]};
         res.status(200).render('update', originalData);
     });
