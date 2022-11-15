@@ -158,7 +158,7 @@ app.get('/update', (req, res) => {
     
     getData('/manage').then((data) => {
         const dataPos = data[key];
-        originalData = {name: dataPos[0], type: dataPos[1], quantity: dataPos[2], address: dataPos[3]};
+        originalData = {name: dataPos?.[0], type: dataPos?.[1], quantity: dataPos?.[2], address: dataPos?.[3]};
         res.status(200).render('update', originalData);
     });
 });
