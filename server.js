@@ -157,12 +157,10 @@ app.get('/update', (req, res) => {
     const key = Object.keys(req.query)[0];
     
     getData('/manage').then((data) => {
-        try {
-            const dataPos = data[key];
-        } catch (error) {
-            res.status(404).render('404');
-        }
         const dataPos = data[key];
+        if (dataPos === undefined)
+            res.status(404).render('404');
+        
         originalData = {name: dataPos?.[0], type: dataPos?.[1], quantity: dataPos?.[2], address: dataPos?.[3]};
         res.status(200).render('update', originalData);
     });
