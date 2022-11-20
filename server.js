@@ -131,8 +131,6 @@ app.post('/delete/batch', (req, res) => {
     getData('/manage').then(data => {
         const itemToDeleteDataArr = itemsToDeleteIndecies.map(i => {
             const arr = data[i];
-            console.log(arr);
-
             return {name: arr[0], type: arr[1], quantity: arr[2], address: arr[3]};
         });
 
