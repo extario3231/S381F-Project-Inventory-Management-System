@@ -17,14 +17,6 @@ app.use(session({
 
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
-const getPage = async (path) => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    
-    await page.goto(`http://localhost:3000${path}`);
-    return page;
-}
-
 const getData = async (path) => {
     const page = await getPage(path);
     await page.waitForSelector('p');
@@ -123,18 +115,6 @@ app.get('/search', (req, res) => {
         });
         urls.push(req.originalUrl);
     });
-});
-
-app.get('/delete/batch', (req, res) => {
-    const getItemData = async () => {
-        const page = await getPage('/manage');
-        await page.waitForSelector('#cb')
-        const h = page.evaluate(() => {
-            const g = [...document.querySelectorAll('#cb')]
-            return g
-        })
-        console.log(h);
-    }
 });
 
 app.post('/delete', (req, res) => {
