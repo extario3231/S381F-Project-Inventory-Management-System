@@ -85,6 +85,23 @@ app.get('/manage/insert', (req, res) => {
     res.render('insert');
 });
 
+app.get('/manage/insert/api/name/:n/type/:t/quantity/:q/address/:a', (req, res) => {
+    const body = req.body;
+
+    const newItem = new Item({
+        name: req.params.n,
+        type: req.params.t,
+        quantity: req.params.q,
+        address: req.params.a
+    });
+    
+    newItem.save(err => {
+        if (err) console.log('Error!');
+        console.log('Saved');
+    });
+    res.status(200).redirect('/manage');
+});
+
 app.post('/insert', (req, res) => {
     const body = req.body;
 
