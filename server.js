@@ -17,7 +17,15 @@ app.use(session({
 
 mongoose.connect('mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority');
 
-const getData = async (path) => {
+const getPage = async path => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    await page.goto(`http://localhost:3000${path}`);
+    return page;
+}
+
+const getData = async path => {
     const page = await getPage(path);
     await page.waitForSelector('p');
 
@@ -87,7 +95,7 @@ app.post('/insert', (req, res) => {
         address: body.address
     });
     
-    newItem.save((err) => {
+    newItem.save(err => {
         if (err) console.log('Error!');
         console.log('Saved');
     });
@@ -117,15 +125,35 @@ app.get('/search', (req, res) => {
     });
 });
 
+app.post('/delete/batch', (req, res) => {
+    const itemsToDeleteIndecies = req.body.arr.split(',').map(e => parseInt(e));
+
+    getData('/manage').then(data => {
+        const itemToDeleteDataArr = itemsToDeleteIndecies.map(i => {
+            const arr = data[i];
+            console.log(arr);
+
+            return {name: arr[0], type: arr[1], quantity: arr[2], address: arr[3]};
+        });
+
+        itemToDeleteDataArr.forEach(e => {
+            Item.deleteOne(e, err => {
+            if (err) res.status(404).render('404');
+            });
+        }); 
+    res.status(200).redirect('/manage');
+    });
+})
+
 app.post('/delete', (req, res) => {
     const itemToDeleteKey = Object.keys(req.body)[0];
     const currentUrl = urls.length === 0 ? '/manage' : urls[0];
 
-    getData(currentUrl).then((data) => {
+    getData(currentUrl).then(data => {
         const dataPos = data[itemToDeleteKey];
         const filter = {name: dataPos[0], type: dataPos[1], quantity: dataPos[2], address: dataPos[3]};
 
-        Item.deleteOne(filter, (err) => {
+        Item.deleteOne(filter, err => {
             if (err) console.log('Error');
             console.log('Deleted');
             res.status(200).redirect('/manage');
@@ -136,7 +164,7 @@ app.post('/delete', (req, res) => {
 app.get('/update', (req, res) => {
     const key = Object.keys(req.query)[0];
     
-    getData('/manage').then((data) => {
+    getData('/manage').then(data => {
         const dataPos = data[key];
         if (dataPos === undefined)
             res.status(404).render('404');
@@ -155,7 +183,7 @@ app.post('/item/update', (req, res) => {
             dataToUpdate[key] = form[key];
     }
     
-    Item.updateOne(originalData, dataToUpdate, (err) => {
+    Item.updateOne(originalData, dataToUpdate, err => {
         if (err) res.status(404).render('404');
         console.log('Updated');
         res.status(200).redirect('/manage');

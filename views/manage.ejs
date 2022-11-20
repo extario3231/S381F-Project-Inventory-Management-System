@@ -39,7 +39,8 @@
             </form>
             </td>
             <td>
-            <form action="/delete/batch" method="get">
+            <form action="/delete/batch" method="post">
+                <input type="text" name="arr" id="counts" value="" hidden>
                 <button type="submit" class="button">Batch Delete</button>
             </form>
             </td>
@@ -58,6 +59,7 @@
         <ol>
             <% for (let i = 0; i < items.length; i++) { %>
                 <li>
+                    <input type="checkbox" id="<%= i %>" onclick="add(this)">
                     Name: <p id="name" class="attr"><%= items[i].name %></p><br>
                     Type: <p id="type" class="attr"><%= items[i].type %></p><br>
                     Quantity: <p id="qty" class="attr"><%= items[i].quantity %></p><br>
@@ -73,4 +75,19 @@
             <% } %>
         </ol>
     </body>
+    <script>
+        let counts = document.querySelector('#counts');
+        const arr = [];
+
+        function add(cb) {
+            if (cb.checked) {
+                arr.push(cb.id);
+                counts.value = arr;
+
+            } else {
+                arr.splice(arr.indexOf(cb.id));
+                counts.value = arr;
+            }
+        }
+    </script>
 </html>
