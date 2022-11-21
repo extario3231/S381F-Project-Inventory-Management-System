@@ -1,6 +1,6 @@
 # COMPS 381F Server-side Technologies And Cloud Computing Project
 
-# Inventory Management System
+# Warehouse Management System
 
 Group Members:
 
