@@ -131,7 +131,7 @@ app.get('/search', (req, res) => {
             delete query[key];
         }
     }
-    console.log(query)
+
     Item.find(query, (err, results) => {
         if (err) res.status(404).render('404');
         res.status(200).render('manage', {
@@ -191,7 +191,7 @@ app.get('/update', (req, res) => {
     
 app.post('/item/update', (req, res) => {
     const form = req.body;
-    delete originalData._locals;
+    delete originalData['._locals'];
     const dataToUpdate = {};
     for (const key in form) {
         if (form[key] !== originalData[key])
