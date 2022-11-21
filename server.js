@@ -131,7 +131,7 @@ app.get('/search', (req, res) => {
             delete query.key;
         }
     }
-
+    console.log(query)
     Item.find(query, (err, results) => {
         if (err) res.status(404).render('404');
         res.status(200).render('manage', {
