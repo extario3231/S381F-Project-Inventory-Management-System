@@ -126,8 +126,8 @@ app.get('/manage/search', (req, res) => {
 app.get('/search', (req, res) => {
     const query = req.query;
 
-    for (const key in query) {
-        if (query[key].length === 0) {
+    for (const [key, value] of Object.entries(query)) {
+        if (value.length === 0) {
             delete query.key;
         }
     }
