@@ -128,7 +128,7 @@ app.get('/search', (req, res) => {
 
     for (const key in query) {
         if (Object.hasOwn(query, key) && query[key].length === 0) {
-            delete query[key];
+            delete query.key;
         }
     }
 
