@@ -49,7 +49,7 @@ const getData = async path => {
     return dataToSend;
 };
 
-let urls = [];
+let url;
 let originalData;
 
 app.get('/', (req, res) => {
@@ -138,7 +138,7 @@ app.get('/search', (req, res) => {
             username: req.session.username,
             items: results
         });
-        urls.push(req.originalUrl);
+        url = req.originalUrl;
     });
 });
 
@@ -162,7 +162,7 @@ app.post('/delete/batch', (req, res) => {
 
 app.post('/delete', (req, res) => {
     const itemToDeleteKey = Object.keys(req.body)[0];
-    const currentUrl = urls.length === 0 ? '/manage' : urls[0];
+    const currentUrl = url === undefined ? '/manage' : url;
 
     getData(currentUrl).then(data => {
         const dataPos = data[itemToDeleteKey];
