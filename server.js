@@ -98,7 +98,7 @@ app.get('/manage/insert/api/name/:n/type/:t/quantity/:q/address/:a', (req, res) 
     });
     
     newItem.save(err => {
-        if (err) console.log('Error!');
+        if (err) console.log(err);
         console.log('Saved');
     });
     res.status(200).render('/manage');
