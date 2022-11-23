@@ -88,8 +88,6 @@ app.get('/manage/insert', (req, res) => {
 });
 
 app.get('/manage/insert/api/name/:n/type/:t/quantity/:q/address/:a', (req, res) => {
-    const body = req.body;
-
     const newItem = new Item({
         name: req.params.n,
         type: req.params.t,
