@@ -56,10 +56,8 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req, res) => {
     const username = req.body.user;
-    const password = req.body.password;
-    const db = req.body.db;
 
-    mongoose.connect(`mongodb+srv://${db}:${password}@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority`);
+    mongoose.connect(`mongodb+srv://root:root@cluster0.9ytrvti.mongodb.net/?retryWrites=true&w=majority`);
 
     req.session.authenticated = true;
     req.session.username = username;
