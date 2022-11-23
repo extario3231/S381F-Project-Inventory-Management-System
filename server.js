@@ -101,7 +101,7 @@ app.get('/manage/insert/api/name/:n/type/:t/quantity/:q/address/:a', (req, res) 
         if (err) console.log('Error!');
         console.log('Saved');
     });
-    res.status(200).redirect('/manage');
+    res.status(200).render('/manage');
 });
 
 app.post('/insert', (req, res) => {
